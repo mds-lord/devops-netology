@@ -3,7 +3,7 @@
 
 this line was added for the first commit
 
-### added .gitignore for terraform
+added .gitignore for terraform
 
 **благодаря файлу terraform/.gitignore Git проигнорирует следующие файлы:**
 
