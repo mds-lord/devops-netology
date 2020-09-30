@@ -63,5 +63,5 @@ if (echo $message | grep -E -q "^\[[a-zA-Z0-9\-]*\].*$")
 then
   exit 0  
 fi
-ech "Error: message format is wrong!" 
+echo "Error: message format is wrong!" 
 exit 1
