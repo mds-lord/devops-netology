@@ -1,0 +1,67 @@
+1)
+переменная с будет содержать строку a+b (вообще нет обращений к значениям переменных)
+переменная d будет содержать строку 1+2 (есть обращения, но нет команды let или явного выполнения операции)
+переменная e будет содержать строку 3 (так как есть обращение к значениям переменных через $ и присвоение в переменную результата операции заключенной в $() 
+
+2)
+в скрипт необходимо добавить команду break после команды date. после доступности сервиса дата постоянно дописывается в файл curl.log, что и приводит к уменьшению места на диске
+
+3)
+скрипт требует установленный nmap
+#!/usr/bin/env bash
+urls=("192.168.0.1" "173.194.222.113" "87.250.250.242")
+for i in ${urls[@]}
+do
+  n = 0
+  check = "доступен"
+  while (($n < 5))
+  do
+    n = $(($n+1))
+    nmap $i -p 80 | grep -q "/tcp open"
+    if (($? != 0))
+    then
+      check = "недоступен"
+      break
+    fi
+  done
+  echo "$i:80 $check" >> log
+done
+
+4)
+скрипт требует установленный nmap
+#!/usr/bin/env bash
+urls=("192.168.0.1" "173.194.222.113" "87.250.250.242")
+check = ""
+while (($check == ""))
+do
+  for i in ${urls[@]}
+  do
+    nmap $i -p 80 | grep -q "/tcp open"
+    if (($? != 0))
+    then
+      check = $i
+      break
+    fi
+  done
+  if (($check != ""))
+  then
+    echo $check > error
+  fi
+done
+
+*)
+на компьютере с репозиторием должен быть установлен bash
+создаём в папке .git/hooks файл commit-msg со следующим содержимым:
+#!/usr/bin/env bash
+message = $(<$1)
+if ((${#message} > 30))
+then
+  echo "Error: commit message should not be longer then 30 symbols!"
+	exit 1
+fi
+if (echo $message | grep -E -q "^\[[a-zA-Z0-9\-]*\].*$")
+then
+  exit 0  
+fi
+ech "Error: message format is wrong!" 
+exit 1
